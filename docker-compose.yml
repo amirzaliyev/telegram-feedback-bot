@@ -1,0 +1,19 @@
+services:
+  app:
+    container_name: feedbackbot
+    restart: unless-stopped
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    volumes:
+      - ./:/code/app
+    env_file:
+      - ./.env
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Africa/Cairo
+      - /etc/localtime:/etc/localtime:ro
+    command: >
+      sh -c "alembic -c alembic.ini upgrade head &&
+             python3 -m src"
